@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地方特色美食介绍 - 寻味本土烟火味</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Microsoft YaHei', Arial, sans-serif;
+      background-color: #f8fcff;
+      color: #333;
+      line-height: 1.7;
+    }
+
+    nav {
+      background-color: #e6f3ff;
+      padding: 1.2rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,102,204,0.08);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #0066cc;
+      font-weight: bold;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    nav ul li a:hover, nav ul li a.active {
+      background-color: #0066cc;
+      color: white;
+    }
+
+
+    .page {
+      display: none;
+      padding: 2.5rem 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+
+    .carousel {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto 3rem;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,102,204,0.1);
+    }
+
+    .carousel-inner {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .carousel-item {
+      min-width: 100%;
+      height: 420px;
+      background-color: #cce5ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: #0066cc;
+      font-weight: bold;
+    }
+
+    .carousel-controls {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      padding: 0 1.5rem;
+    }
+
+    .carousel-btn {
+      background-color: rgba(255,255,255,0.9);
+      border: none;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #0066cc;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .carousel-btn:hover {
+      background-color: #0066cc;
+      color: white;
+    }
+
+    .carousel-indicators {
+      position: absolute;
+      bottom: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .indicator.active {
+      background-color: white;
+      width: 18px;
+    }
+
+
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .food-card {
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(0,102,204,0.08);
+      transition: transform 0.3s ease;
+    }
+
+    .food-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .food-img {
+      height: 200px;
+      background-color: #e6f3ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0066cc;
+      font-size: 1.1rem;
+    }
+
+    .food-info {
+      padding: 1.5rem;
+    }
+
+    .food-info h3 {
+      color: #0066cc;
+      margin-bottom: 0.8rem;
+      font-size: 1.3rem;
+    }
+
+    .food-info p {
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+
+    .section-title {
+      text-align: center;
+      color: #0066cc;
+      margin-bottom: 2rem;
+      font-size: 1.9rem;
+      border-bottom: 3px solid #cce5ff;
+      padding-bottom: 0.8rem;
+      max-width: 350px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .white-card {
+      background-color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 3px 12px rgba(0,102,204,0.08);
+      margin: 2.5rem 0;
+    }
+
+
+
+    .ranking-list {
+      padding-left: 1.8rem;
+      line-height: 2.2;
+    }
+
+    .ranking-list li {
+      margin-bottom: 0.8rem;
+      font-size: 1rem;
+    }
+
+    .ranking-list strong {
+      color: #0066cc;
+    }
+
+    /* a n */
+    .btn {
+      display: inline-block;
+      background-color: #0066cc;
+      color: white;
+      padding: 0.8rem 1.8rem;
+      border-radius: 6px;
+      text-decoration: none;
+      margin-top: 1.2rem;
+      transition: background-color 0.3s ease;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background-color: #004c99;
+    }
+
+    footer {
+      background-color: #e6f3ff;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+      color: #0066cc;
+      font-size: 0.95rem;
+    }
+
+
+  </style>
+</head>
+<body>
+
+<nav>
+  <ul>
+    <li><a href="#" class="nav-link active" data-page="home">首页</a></li>
+    <li><a href="#" class="nav-link" data-page="foods">美食推荐</a></li>
+    <li><a href="#" class="nav-link" data-page="detail">美食详情</a></li>
+    <li><a href="#" class="nav-link" data-page="about">关于我们</a></li>
+  </ul>
+</nav>
+
+<div id="home" class="page active">
+  <h1 style="text-align: center; color: #0066cc; margin-bottom: 1rem; font-size: 2.3rem;">寻味本土 · 地方美食指南</h1>
+  <p style="text-align: center; max-width: 900px; margin: 0 auto 2.5rem; font-size: 1.1rem; color: #444;">
+    一方水土孕育一方风味，每一道美食，都蕴藏着当地的风土人情、历史底蕴与市井烟火。
+    精选经典名菜、街头小吃与传统糕点，带你沉浸式解锁舌尖上的家乡味道，
+    感受藏在美食里的文化传承与温暖记忆。
+  </p>
+
+
+  <div class="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item"><img src="img/a.png" height="500" width="1000"/></div>
+      <div class="carousel-item"><img src="img/b.png" height="500" width="1000"/></div>
+      <div class="carousel-item"><img src="img/c.png" height="500" width="1000"/></div>
+    </div>
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="prevBtn">&#10094;</button>
+      <button class="carousel-btn" id="nextBtn">&#10095;</button>
+    </div>
+    <div class="carousel-indicators">
+      <div class="indicator active" data-index="0"></div>
+      <div class="indicator" data-index="1"></div>
+      <div class="indicator" data-index="2"></div>
+    </div>
+  </div>
+
+
+  <h2 class="section-title">美食分类一览</h2>
+  <div class="food-grid">
+    <div class="food-card">
+      <div class="food-img"><img src="img/a.png" height="200" width="400"/></div>
+      <div class="food-info">
+        <h3>经典名菜</h3>
+        <p>匠心慢烹，口感醇厚香浓，是宴席必备佳肴，承载几代人的味觉记忆。</p>
+      </div>
+    </div>
+    <div class="food-card">
+      <div class="food-img"><img src="img/b.png" height="200" width="400"/></div>
+      <div class="food-info">
+        <h3>街头小吃</h3>
+        <p>藏在市井小巷的烟火美味，口味丰富多样，每一口都充满市井温情，老少皆宜。</p>
+      </div>
+    </div>
+    <div class="food-card">
+      <div class="food-img"><img src="img/c.png" height="200" width="400"/></div>
+      <div class="food-info">
+        <h3>传统糕点</h3>
+        <p>口感软糯香甜，造型精致美观，是走亲访友的优质伴手礼。</p>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="white-card">
+    <h2 style="color: #0066cc; margin-bottom: 1.5rem; font-size: 1.8rem;">本地美食人气TOP榜</h2>
+    <ul class="ranking-list">
+      <li><strong>TOP 招牌名菜：</strong>人票选第一，日均销量超高，鲜香味美，老少皆宜，全网打卡爆款</li>
+      <li><strong>TOP 老字号小吃：</strong>经营数十年的街头老店，独家秘制配方，每日限量供应，回头客超90%，烟火气拉满</li>
+      <li><strong>TOP 非遗糕点：</strong>非遗美食，古法手工制作，口感软糯不腻，是特色伴手礼首选，送礼自留两相宜</li>
+      <li><strong>TOP 滋补靓汤：</strong>慢炖4小时以上，选用新鲜食材，温润滋补，适合全家食用，秋冬季节销量稳居前列</li>
+      <li><strong>TOP 特色面食：</strong>纯手工现做，筋道爽口，搭配秘制酱料，一口沦陷，是早餐、正餐的高频选择</li>
+    </ul>
+    <a href="#" class="btn nav-link" data-page="foods">查看全部美食>></a>
+  </div>
+
+
+  <h2 class="section-title">美食文化小科普</h2>
+  <div class="white-card">
+    <p style="font-size: 1.05rem; line-height: 1.9; color: #444;">
+      饮食文化源远流长，文化可以从时代与技法、地域与经济、民族与宗教、食品与食具、消费与层次、
+      民俗与功能等多种角度进行分类，展示出不同的文化品味，体现出不同的使用价值，异彩纷呈。
+      从宴席上的硬菜到街头的小吃，每一道美食背后都有专属的历史故事与民俗寓意，不仅是味蕾的享受，
+      更是地域文化的重要载体。如今，这些地道美味不仅扎根本地市井，更逐渐走出地域，成为对外展示
+      本土文化的亮眼名片，让更多人通过美食，了解这片土地的风土与人情。
+    </p>
+  </div>
+</div>
+
+
+<div id="foods" class="page">
+  <h1 class="section-title" style="max-width: 400px;">美食推荐</h1>
+  <div class="food-grid">
+  <div class="food-card">
+    <div class="food-img"><img src="img/1.png" height="150" width="300"/></div>
+    <div class="food-info">
+      <h3>鱼露</h3>
+      <p>鱼露，又称鱼酱油，味道带有咸味和鲜味。鱼露是用小鱼虾为原料，经腌渍、发酵、熬炼后得到的一种味道鲜美的、色泽呈琥珀色的汁液。</p>
+    </div>
+  </div>
+  <div class="food-card">
+    <div class="food-img"><img src="img/2.png" height="150" width="300"/></div>
+    <div class="food-info">
+      <h3>鲁南煎饼</h3>
+      <p>鲁南煎饼是以生铁鏊子为主要工具制作的山东省传统面食，盛产于薛城区，据民间传说与诸葛亮相关。其制作需经铁鏊打磨、涂油养护等工序，燃料选用玉米秸等软质柴草以保持均匀火候。按原料分为地瓜煎饼与麦子煎饼，前者采用挤水掺玉米面工艺制成耐储存的香甜薄饼，后者以稀面糊摊制呈现酥软易变韧的口感。</p>
+    </div>
+  </div>
+  <div class="food-card">
+    <div class="food-img"><img src="img/3.png" height="150" width="300"/></div>
+    <div class="food-info">
+      <h3>东坡肉</h3>
+      <p>东坡肉，又称滚肉、东坡焖肉，是中国历史上的十大名菜之一。相传北宋元丰三年（1080年）苏轼谪居黄州时改良了徐州抗洪期间（1077年）创制的回赠肉，元祐五年（1090年）在杭州定型推广。明代《万历野获编》首载“东坡肉”名称。</p>
+    </div>
+  </div>
+  <div class="food-card">
+    <div class="food-img"><img src="img/4.png" height="150" width="300"/></div>
+    <div class="food-info">
+      <h3>西湖醋鱼</h3>
+      <p>西湖醋鱼，又名“叔嫂传珍”“宋嫂鱼”，前身为“宋嫂鱼羹”，是中国浙江省杭州市传统风味名菜，为浙江菜系。</p>
+    </div>
+  </div>
+  <div class="food-card">
+    <div class="food-img"><img src="img/5.png" height="150" width="300"/></div>
+    <div class="food-info">
+      <h3>九转大肠</h3>
+      <p>九转大肠，是山东省济南市传统名菜，属鲁菜系，以猪大肠为主料，加以葱、姜、芫荽等配料，经煮、烧等技法制作，成菜色泽红润，质地软嫩，兼具酸、甜、香、咸、辣五味</p>
+    </div>
+  </div>
+  <div class="food-card">
+    <div class="food-img"><img src="img/6.png" height="150" width="300"/></div>
+    <div class="food-info">
+      <h3>糖醋鲤鱼</h3>
+      <p>糖醋鲤鱼是山东省济南市传统名菜，属鲁菜系。糖醋鲤鱼制作时需对鱼身改"牡丹花刀"，挂糊油炸定型形成头尾翘起的"鲤跃龙门"造型，浇淋以糖、醋、酱油等调制的糖醋汁，成菜需达到"四开"（鱼嘴、鳃、肚皮、刀口张开）标准。</p>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<div id="detail" class="page">
+  <h1 class="section-title" style="max-width: 300px;">美食详情</h1>
+  <div class="white-card">
+    <div style="width: 100%; height: 400px; background-color: #e6f3ff; display: flex; align-items: center; justify-content: center; color: #0066cc; font-size: 1.3rem; border-radius: 8px; margin-bottom: 2rem;">
+
+      <img src="img/cu.png" /></div>
+    <h2 style="color: #0066cc; margin-bottom: 1rem;">九转大肠</h2>
+    <p style="line-height: 1.9; margin-bottom: 1rem;">
+      九转大肠是鲁菜经典代表名菜，更是中国八大菜系中极具辨识度的荤菜，位列“中国菜·山东十大经典名菜”，以工序繁复、五味俱全、口感软糯醇厚闻名。这道菜脱胎于普通红烧大肠，经百年传承改良，成为兼具烟火气与匠心工艺的美食传奇。
+      九转大肠确切起源于清朝光绪初年（公元1883年左右），发源地为山东济南县东巷北首的九华楼饭庄，由饭庄杜姓老板（杜九龄）与店内主厨共同创制，是鲁菜中少有的有明确创始记载的经典菜品。九华楼老板杜九龄是济南富商，一生信佛，偏爱数字“九”，旗下店铺均以“九”字冠名，饭庄主打猪下货烹制，在济南当地小有名气。相传杜九龄赴友人宴席，获赠一挂新鲜猪大肠，便吩咐主厨将其做成特色菜肴。主厨最初以传统红烧技法烹制，成菜后色泽红亮、肥而不腻，深受食客喜爱，初定名“红烧大肠”。后续主厨不断优化工艺，融入道家“九转金丹”的炼丹理念，将烹饪工序细化为九道核心步骤，反复煨烧、收汁、入味，如同炼制仙丹般精益求精。某次文人墨客赴宴品尝，惊叹于菜品工艺精细、滋味醇厚，堪比“九转仙丹”，加之老板偏爱“九”字，遂将菜品更名为“九转大肠”，从此名声大噪，从济南地方菜一跃成为鲁菜招牌，流传至今。
+    </p>
+
+  </div>
+</div>
+
+
+<div id="about" class="page">
+  <h1 class="section-title" style="max-width: 200px;">关于我们</h1>
+  <div class="white-card">
+    <h3 style="color: #0066cc; margin-bottom: 1rem;">平台介绍</h3>
+    <p style="line-height: 1.9; margin-bottom: 1.5rem;">
+      本平台致力于挖掘、推广本地地道特色美食，传承本土饮食文化，收录各类经典美食、老字号店铺与特色小吃，
+      为提供全面、真实的美食指南，让更多人爱上本土味道，感受地域美食文化的独特魅力。
+    </p>
+    <h3 style="color: #0066cc; margin-bottom: 1rem;">联系我们</h3>
+    <p style="line-height: 1.9;">
+      如有美食推荐、合作意向或意见建议，欢迎随时联系我们，一同守护本土美食文化，传递舌尖上的温暖。
+      <br>联系方式：13xxxxxxxxx | 地址：本地美食文化推广中心
+    </p>
+  </div>
+</div>
+
+
+<footer>
+  <p>&copy; 2026 特色美食文化 | 寻味本土 传承美味</p>
+</footer>
+
+<script>
+  // lun
+  let currentIndex = 0;
+  const carouselInner = document.querySelector('.carousel-inner');
+  const indicators = document.querySelectorAll('.indicator');
+  const totalItems = document.querySelectorAll('.carousel-item').length;
+  let autoplayTimer;
+
+
+  function updateCarousel() {
+    carouselInner.style.transform = `translateX(-${currentIndex * 100}%)`;
+    indicators.forEach((indicator, index) => {
+      indicator.classList.toggle('active', index === currentIndex);
+    });
+  }
+
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % totalItems;
+    updateCarousel();
+  }
+
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+    updateCarousel();
+  }
+
+
+  function startAutoplay() {
+    autoplayTimer = setInterval(nextSlide, 3500);
+  }
+
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    clearInterval(autoplayTimer);
+    nextSlide();
+    startAutoplay();
+  });
+
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    clearInterval(autoplayTimer);
+    prevSlide();
+    startAutoplay();
+  });
+
+  indicators.forEach((indicator, index) => {
+    indicator.addEventListener('click', () => {
+      clearInterval(autoplayTimer);
+      currentIndex = index;
+      updateCarousel();
+      startAutoplay();
+    });
+  });
+
+
+  startAutoplay();
+
+
+  const navLinks = document.querySelectorAll('.nav-link');
+  const pages = document.querySelectorAll('.page');
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetPage = link.getAttribute('data-page');
+
+
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+
+
+      pages.forEach(page => {
+        page.classList.remove('active');
+        if (page.id === targetPage) {
+          page.classList.add('active');
+
+          window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
